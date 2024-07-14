@@ -1,34 +1,23 @@
 'use strict'
 
-function getComputerChoice() {
-  switch (Math.floor(Math.random() * 3)) {
-    case 0: return 'rock';
-    case 1: return 'paper';
-    case 2: return 'scissors';
-    default:
-      console.log('This should *not* be reachable. There is an error.');
-      break;
-  }
-}
+// DOM Nodes
+const resultBanner = document.querySelector('div.result');
+const scoreHuman = document.querySelector('div.scoreHuman');
+const scoreComputer = document.querySelector('div.scoreComputer');
 
-function getHumanChoice() {
-  let humanChoice = '';
-  do {
-    humanChoice = prompt('Rock, Paper, or Scissors?').toLowerCase();
-  } while (humanChoice !== 'rock' && humanChoice !== 'paper' && humanChoice !== 'scissors')
-  return humanChoice;
-}
+document.querySelectorAll('button').forEach((button) => {
+  button.addEventListener('click', () => {
+    playRound(button.textContent.toLowerCase());
+  })
+})
 
-let scoreComputer = 0;
-let scoreHuman = 0;
-
-function playRound() {
-  let computerChoice = getComputerChoice();
-  let humanChoice = getHumanChoice();
+function playRound(humanChoice = '', computerChoice = getComputerChoice()) {
 
   // Draw
   if (humanChoice === computerChoice) {
-    alert("It's a tie!");
+    resultBanner.innerText = "It's a tie!";
+    scoreHuman.innerText -= -0.5;
+    scoreComputer.innerText -= -0.5;
     return;
   }
 
@@ -36,8 +25,8 @@ function playRound() {
   else if ((humanChoice === 'rock'     && computerChoice === 'scissors') ||
            (humanChoice === 'paper'    && computerChoice === 'rock')     ||
            (humanChoice === 'scissors' && computerChoice === 'paper')) {
-    alert('You win!')
-    scoreHuman += 1;
+    resultBanner.innerText = "You won!";
+    scoreHuman.innerText -= -1;
     return;
   }
 
@@ -45,41 +34,16 @@ function playRound() {
   else if ((computerChoice === 'rock'     && humanChoice === 'scissors') ||
            (computerChoice === 'paper'    && humanChoice === 'rock')     ||
            (computerChoice === 'scissors' && humanChoice === 'paper')) {
-    alert('You lost!')
-    scoreComputer += 1;
+    resultBanner.innerText = "You lost!";
+    scoreComputer.innerText -= -1;
     return;
   }
 }
 
-function playGame() {
-  for (let i = 0; i < 5; i++) {
-    playRound();
-  }
-  console.log(`Human: ${scoreHuman}\nComputer: ${scoreComputer}`);
-  if (scoreComputer > scoreHuman) {
-    console.log('Computer wins!');
-  }
-  if (scoreComputer < scoreHuman) {
-    console.log('Human wins!');
-  }
-  return
-}
-
-playGame();
-
-/*
-let rock = 0;
-let paper = 0;
-let scissors = 0;
-
-for (let i = 0; i < 1000000; i++) {
-  switch (getComputerChoice()) {
-    case 'rock': rock += 1; break;
-    case 'paper': paper += 1; break;
-    case 'scissors': scissors += 1; break;
-    default: console.error('wtf?'); break;
+function getComputerChoice() {
+  switch (Math.floor(Math.random() * 3)) {
+    case 0: return 'rock';
+    case 1: return 'paper';
+    case 2: return 'scissors';
   }
 }
-
-console.log(`Rock: ${rock}\nPaper: ${paper}\nScissors: ${scissors}`);
-*/
